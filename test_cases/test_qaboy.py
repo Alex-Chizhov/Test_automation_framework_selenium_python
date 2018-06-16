@@ -5,7 +5,8 @@ from values import strings
 from page_objects.home_page import HomePage
 from page_objects.about_page import AboutPage
 from page_objects.post_page import PostPage
-from page_objects.base_page import BasePage
+from page_objects.sidebar import SideBar
+from page_objects.search_page import SearchPage
 
 
 class TestQABoy(unittest.TestCase):
@@ -49,6 +50,27 @@ class TestQABoy(unittest.TestCase):
         post_page.validate_published_date()
         post_page.validate_share_buttons()
         post_page.validate_comment_section()
+
+    def test_search_for_article(self):
+        sidebar = SideBar(self.driver)
+        sidebar.search_for_article(strings.article_title)
+
+        search_page = SearchPage(self.driver)
+        search_page.click_article(strings.article_title)
+
+        post_page = PostPage(self.driver)
+        post_page.validate_article_title(strings.article_title)
+
+    def test_check_user_comment(self):
+        sidebar = SideBar(self.driver)
+        sidebar.click_user_comment()
+
+        post_screen = PostPage(self.driver)
+        post_screen.validate_comment_section()
+
+    def test_article_categories(self):
+        sidebar = SideBar(self.driver)
+        sidebar.click_category()
 
     def tearDown(self):
         '''tearDown method will run after - each of our test cases
